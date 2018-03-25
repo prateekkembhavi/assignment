@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script  src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css"/>
+</head>
+<body>
+
+<script type = "text/javascript">
+
+function EmailController($scope) {
+    $scope.isPopupVisible = false;
+	
+
+	$scope.closePopup = function() {
+	$scope.isPopupVisible = false;
+};
+    $scope.showPopup = function (email) {
+    $scope.isPopupVisible = true;
+    $scope.selectedEmail = email;
+};
+
+	$scope.isComposePopupVisible = false;
+	
+	$scope.showComposePopup = function() {
+	$scope.isComposePopupVisible = true;
+};
+
+	$scope.closeComposePopup = function() {
+	$scope.isComposePopupVisible = false;
+};
+
+	$scope.showComposePopup = function() {
+    $scope.composeEmail = {};
+    $scope.isComposePopupVisible = true;
+};
+
+
+	$scope.composeEmail = {};
+	
+	$scope.activeTab = "inbox";
+
+
+	$scope.sentEmails = [ 
+	{  
+		to: 'John',
+        subject: 'You are the best', 
+        date: 'Jan 2', 
+        body: 'Thanks for helping me out yesterday'
+    }
+	];
+	
+	
+$scope.sendEmail = function() {
+    $scope.isComposePopupVisible = false;
+    $scope.sentEmails.push($scope.composeEmail);
+	$scope.composeEmail.date = new Date();
+	$scope.composeEmail.from = 'me';
+};
+
+    $scope.emails = [
+    { 
+        from: 'John', 
+		to: 'me',
+        subject: 'I love angular', 
+        date: 'Jan 1', 
+        body: 'hello world!'
+    },
+    { 
+        from: 'Jack', 
+		to: 'me',
+        subject: 'Angular and I are just friends', 
+        date: 'Feb 15', 
+        body: 'just kidding'
+    },
+    { 
+        from: 'Ember', 
+		to: 'me',
+        subject: 'I hate you Angular!', 
+        date: 'Dec 8', 
+        body: 'wassup dude'
+    }
+];
+
+}
+
+</script>
+
+	
+    <div class="container" ng-app ng-controller="EmailController">
+	
+	
+	<ul class="nav nav-tabs">
+    <li ng-class="{active: activeTab == 'inbox'}">
+        <a ng-click="activeTab='inbox'">Inbox</a>
+    </li>
+    <li ng-class="{active: activeTab == 'sent'}">
+        <a ng-click="activeTab='sent'">Sent</a>
+    </li>
+	</ul>
+
+
+
+<table class="table table-border table-condensed" ng-show="activeTab=='inbox'">
+    <tbody>
+
+        <tr><button class="btn btn-primary" ng-click="showComposePopup()" >Compose</button></tr>
+		<tr ng-repeat="email in emails" ng-click="showPopup(email)">
+		<td>{{ email.from }}</td>
+		<td>{{ email.subject }}</td>
+		<td>{{ email.date }}</td>
+		</tr>
+    </tbody>
+</table>
+
+<table class="table table-border table-condensed" ng-show="activeTab=='sent'">
+    <tbody>
+		<tr ng-repeat="email in sentEmails" ng-click="showPopup(email)">
+		<td>{{ email.to }}</td>
+		<td>{{ email.subject }}</td>
+		<td>{{ email.date | date:'MMM d' }}<td>
+		</tr>
+    </tbody>
+</table>
+
+<div class="modal" ng-show="isPopupVisible">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closePopup()">X</button>
+        <h3>{{selectedEmail.subject}}</h3>
+    </div>
+    <div class="modal-body">
+        <strong>From:</strong> {{selectedEmail.from}} <br />
+		<strong>To:</strong> {{selectedEmail.to}} <br />
+        <strong>Date:</strong> {{selectedEmail.date | date:'MMM d'}} <br />
+        <br />
+        <p>
+           {{selectedEmail.body}}
+        </p>
+    </div>
+    <div class="modal-footer">
+
+        <a href="#" class="btn btn-primary" ng-click="closePopup()">Close</a>
+    </div>
+</div>
+
+<div class="modal" ng-show="isComposePopupVisible" >
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeComposePopup()" >X</button>
+        <h3>Compose Email</h3>
+    </div>
+    <div class="modal-body">
+        <form>
+            <input type="text" size = "100" placeholder="To" ng-model="composeEmail.to"><br/>
+			<input type="text" size = "100" placeholder="Subject" ng-model="composeEmail.subject"><br/>
+			<textarea rows="10" cols = "50" ng-model="composeEmail.body"></textarea>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" ng-click="closeComposePopup()" >Close</a>
+        <a href="#" class="btn btn-primary" ng-click="sendEmail()">Send</a>
+    </div>
+</div>
+
+	</div>
+
+</body>
+</html>

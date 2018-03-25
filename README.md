@@ -1,2 +1,5 @@
-# assignment
-front end mail app
+# Assignment
+## Instructions
+Run it via any browser
+Reequires internet for css
+
