@@ -1,5 +1,6 @@
 # Assignment
 ## Instructions
 Run it via any browser
-Reequires internet for css
+
+Requires internet for css
 
